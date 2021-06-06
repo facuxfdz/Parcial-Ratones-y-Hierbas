@@ -78,13 +78,44 @@ reduceFatFast :: Potencia -> Medicamento
 reduceFatFast potencia = administrarHierbas (replicate potencia alcachofa ++  [hierbaVerde "obesidad"])
 
 pdepCilina :: Medicamento
-pdepCilina = curarConHierbasVerdes
+pdepCilina = curarInfecciosasConHierbasVerdes
 
-curarConHierbasVerdes :: Raton -> Raton
-curarConHierbasVerdes raton = foldl (flip hierbaVerde) raton sufijosInfecciosas 
+curarInfecciosasConHierbasVerdes :: Raton -> Raton
+curarInfecciosasConHierbasVerdes raton = foldl (flip hierbaVerde) raton sufijosInfecciosas 
 
 administrarHierbas :: [Hierba] -> Raton -> Raton
 administrarHierbas hierbas raton = foldl (\raton hierba -> hierba raton) raton hierbas
 
 sufijosInfecciosas :: [String]
 sufijosInfecciosas = [ "sis", "itis", "emia", "cocos"]
+
+-- PUNTO 4
+cantidadIdeal :: (Number -> Bool) -> Number 
+cantidadIdeal cond = head (filter cond [1..])  
+
+lograEstabilizar :: Medicamento -> [Raton] -> Bool  
+lograEstabilizar medicamento comunidad = 
+    seEliminaSobrePeso medicamento comunidad &&
+    tienenMenosDe3Enfermedades medicamento comunidad
+
+seEliminaSobrePeso :: Medicamento -> [Raton] -> Bool 
+seEliminaSobrePeso medicamento = not . any (tieneSobrepeso . medicamento)
+
+tienenMenosDe3Enfermedades :: Medicamento -> [Raton] -> Bool 
+tienenMenosDe3Enfermedades medicamento =
+    any (tieneMenosDe3Enfermedades medicamento)
+
+tieneMenosDe3Enfermedades :: Medicamento -> Raton -> Bool
+tieneMenosDe3Enfermedades medicamento = (<3) . length . enfermedades . medicamento 
+    
+tieneSobrepeso :: Raton -> Bool 
+tieneSobrepeso = pesaMasDe 1
+
+pesaMasDe :: Number -> Raton -> Bool  
+pesaMasDe pesoAComparar raton = peso raton > pesoAComparar
+
+calcularPotenciaIdeal :: [Raton] -> Potencia
+calcularPotenciaIdeal comunidad = cantidadIdeal (esPotenciaIdeal comunidad)
+
+esPotenciaIdeal :: [Raton] -> Potencia -> Bool 
+esPotenciaIdeal comunidad potencia = lograEstabilizar (reduceFatFast potencia) comunidad 

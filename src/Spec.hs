@@ -5,7 +5,9 @@ import Test.Hspec
 
 correrTests :: IO ()
 correrTests = hspec $ do
-  describe "Test de ejemplo" $ do
-    it "El pdepreludat se instaló correctamente" $ do
-      doble 1 `shouldBe` 2
+  describe "Pruebas sobre las hierbas" $ do
+    it "la hierba buena rejuvenece a un raton" $ do
+        edad (hierbaBuena cerebro) `shouldBe` 3
+    it "la hierba verde elimina las enfermedades con cierta terminacion" $ do
+        enfermedades (hierbaVerde "sis" cerebro) `shouldBe` ["sarampion"]
 

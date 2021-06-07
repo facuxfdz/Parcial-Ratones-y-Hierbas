@@ -1,3 +1,1 @@
-# Proyecto Base
-
-Reemplazar por alguna descripción del proyecto.
+# Parcial Paradigmas de Programación  
